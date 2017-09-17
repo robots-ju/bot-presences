@@ -36,12 +36,19 @@ class DiscordApi
 
     public function getChannelMessageReactions($channelId, $messageId, $emoji)
     {
-        return $this->response($this->client->get('channels/' . $channelId . '/messages' . $messageId . '/reactions/' . $emoji));
+        return $this->response($this->client->get('channels/' . $channelId . '/messages/' . $messageId . '/reactions/' . $emoji));
     }
 
     public function createChannelMessage($channelId, $data)
     {
         return $this->response($this->client->post('channels/' . $channelId . '/messages', [
+            'json' => $data,
+        ]));
+    }
+
+    public function editChannelMessage($channelId, $messageId, $data)
+    {
+        return $this->response($this->client->patch('channels/' . $channelId . '/messages/' . $messageId, [
             'json' => $data,
         ]));
     }
@@ -54,5 +61,14 @@ class DiscordApi
     public function deleteChannelMessageReaction($channelId, $messageId, $emoji)
     {
         return $this->response($this->client->delete('channels/' . $channelId . '/messages/' . $messageId . '/reactions/' . $emoji . '/@me'));
+    }
+
+    public function getGuildMembers($guildId)
+    {
+        return $this->response($this->client->get('guilds/' . $guildId . '/members', [
+            'query' => [
+                'limit' => 1000,
+            ],
+        ]));
     }
 }
